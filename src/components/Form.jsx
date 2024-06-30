@@ -1,8 +1,8 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React from "react";
 import { BsCardImage } from "react-icons/bs";
-import { db, storeage,uploadBytes } from "../firebase/config";
-import { ref } from "firebase/storage";
+import { db, storage } from "../firebase/config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const Form = ({ user }) => {
   // tweets koleksiyonun refaransını alma
@@ -11,17 +11,19 @@ const Form = ({ user }) => {
   // dosyayı eger resim ise resmi storage yükle
 
   // resmin url'nin fonksiyonun çağırıldığı yere döndür
-  const uploadImage = (file) => {
+  const uploadImage = async (file) => {
     // 1 dosya resim değilse fonksiyonu durdur
-    console.log(file);
+    // console.log(file);
     if (!file || !file.type.startsWith("image")) return null;
 
     // 2 dosya yükleneceği yerin referansını oluştur
-    const fileRef=ref(storeage, file.name);
+    const fileRef = ref(storage, file.name);
 
     // 3 refaransı oluşturduğumuz yere dosyayı yükle
+    await uploadBytes(fileRef, file);
 
     // 4 yüklenen dosyanın url'ine eriş
+    return await getDownloadURL(fileRef);
   };
 
   const handleSubmit = async (e) => {
@@ -29,11 +31,11 @@ const Form = ({ user }) => {
     const textContent = e.target[0].value;
     const imageContent = e.target[1].files[0];
     //resmi yükle
-    uploadImage(imageContent);
+    const url = await uploadImage(imageContent);
     // tweet kolleksiyonuna yeni döküman ekle
     await addDoc(tweetsCol, {
       textContent,
-      imageContent: null,
+      imageContent: url,
       createAt: serverTimestamp(),
       user: {
         id: user.uid,
@@ -43,6 +45,7 @@ const Form = ({ user }) => {
       likes: [],
       isEdited: false,
     });
+    e.target.reset();
   };
   return (
     <form

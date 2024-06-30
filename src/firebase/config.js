@@ -22,4 +22,4 @@ export const auth = getAuth(app);
 //google saglayıcı refaransını alamak için
 export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
-export const storeage = getStorage(app);
+export const storage = getStorage(app);
