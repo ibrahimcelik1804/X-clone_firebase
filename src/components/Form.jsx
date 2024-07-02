@@ -36,7 +36,7 @@ const Form = ({ user }) => {
     await addDoc(tweetsCol, {
       textContent,
       imageContent: url,
-      createAt: serverTimestamp(),
+      createdAt: serverTimestamp(),
       user: {
         id: user.uid,
         name: user.displayName,

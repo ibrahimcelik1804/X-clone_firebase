@@ -7,7 +7,7 @@ import moment from "moment/moment";
 import "moment/locale/tr";
 
 const Post = ({ tweet }) => {
-  const date = moment(tweet?.createAt?.toDate()).fromNow();
+  const date = moment(tweet?.createdAt?.toDate()).fromNow();
   return (
     <div className="relative flex gap-3 py-6 px-3 border-b-[1px] border-gray-700 ">
       <img

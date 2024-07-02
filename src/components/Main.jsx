@@ -11,9 +11,9 @@ const Main = ({ user }) => {
   useEffect(() => {
     const q = query(tweetsCol, orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snapshot) => {
-   //   console.log(snapshot);
+      //   console.log(snapshot);
       const tempTweets = [];
-      snapshot.forEach((doc) => {
+      snapshot.docs.forEach((doc) => {
         tempTweets.push({ id: doc.id, ...doc.data() });
       });
       setTweets(tempTweets);
