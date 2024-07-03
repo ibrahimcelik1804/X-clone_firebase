@@ -1,10 +1,14 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import React from "react";
+import React, { useState } from "react";
 import { BsCardImage } from "react-icons/bs";
 import { db, storage } from "../firebase/config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
+import { toast } from "react-toastify";
+import Spinner from "./Spinner";
 
 const Form = ({ user }) => {
+  const [isLoading, setIsLoading] = useState(false);
   // tweets koleksiyonun refaransını alma
   const tweetsCol = collection(db, "tweets");
 
@@ -17,7 +21,7 @@ const Form = ({ user }) => {
     if (!file || !file.type.startsWith("image")) return null;
 
     // 2 dosya yükleneceği yerin referansını oluştur
-    const fileRef = ref(storage, file.name);
+    const fileRef = ref(storage, v4() + file.name);
 
     // 3 refaransı oluşturduğumuz yere dosyayı yükle
     await uploadBytes(fileRef, file);
@@ -30,6 +34,11 @@ const Form = ({ user }) => {
     e.preventDefault();
     const textContent = e.target[0].value;
     const imageContent = e.target[1].files[0];
+
+    // yazı veya resimiçeriği yoksa uyarı ver
+    if (!textContent && !imageContent)
+      return toast.info("Lütfen içerik giriniz");
+    setIsLoading(true);
     //resmi yükle
     const url = await uploadImage(imageContent);
     // tweet kolleksiyonuna yeni döküman ekle
@@ -45,6 +54,7 @@ const Form = ({ user }) => {
       likes: [],
       isEdited: false,
     });
+    setIsLoading(false);
     e.target.reset();
   };
   return (
@@ -72,7 +82,7 @@ const Form = ({ user }) => {
           </label>
           <input id="image-input" type="file" className="hidden" />
           <button className="bg-blue-500 flex items-center justify-center px-4 py-2 rounded-full min-w-[85px] min-h-[40px] transition hover:bg-blue-800 ">
-            Tweetle
+            {isLoading ? <Spinner size={10} /> : "tweetle"}
           </button>
         </div>
       </div>
