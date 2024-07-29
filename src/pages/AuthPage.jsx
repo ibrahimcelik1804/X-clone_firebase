@@ -66,7 +66,7 @@ const AuthPage = () => {
           <span className="text-nowrap">Google ile Giriş Yap</span>
         </button>
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <label  htmlFor="">Email</label>
+          <label htmlFor="">Email</label>
           <input
             onChange={(e) => setEmail(e.target.value)}
             className="text-black rounded mt-1 p-2 outline-none "

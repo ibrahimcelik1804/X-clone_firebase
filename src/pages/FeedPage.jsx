@@ -13,7 +13,7 @@ const FeedPage = () => {
   }, []);
   return (
     <div className="feed h-screen bg-black overflow-hidden ">
-      <Nav user={user}  />
+      <Nav user={user} />
       <Main user={user} />
       <Aside />
     </div>

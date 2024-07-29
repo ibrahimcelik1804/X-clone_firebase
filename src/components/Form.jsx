@@ -54,8 +54,8 @@ const Form = ({ user }) => {
       likes: [],
       isEdited: false,
     });
-    setIsLoading(false);
     e.target.reset();
+    setIsLoading(false);
   };
   return (
     <form
@@ -81,8 +81,11 @@ const Form = ({ user }) => {
             <BsCardImage />
           </label>
           <input id="image-input" type="file" className="hidden" />
-          <button className="bg-blue-500 flex items-center justify-center px-4 py-2 rounded-full min-w-[85px] min-h-[40px] transition hover:bg-blue-800 ">
-            {isLoading ? <Spinner size={10} /> : "tweetle"}
+          <button
+            disabled={isLoading}
+            className="bg-blue-500 flex items-center justify-center px-4 py-2 rounded-full min-w-[85px] min-h-[40px] transition hover:bg-blue-800 "
+          >
+            {isLoading ? <Spinner /> : "tweetle"}
           </button>
         </div>
       </div>
